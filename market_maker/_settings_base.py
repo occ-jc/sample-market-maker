@@ -1,17 +1,29 @@
 from os.path import join
 import logging
+################################################
+# My own settings
+################################################
+liqfilepath = "/Users/step/bitmex-liquidations/liq.txt"
+factor_long = 50000
+factor_short = 50000
+buy_active = True
+sell_active = False
+buy_threshold = 12100
+sell_threshold = 100000
+
 
 ########################################################################################################################
 # Connection/Auth
 ########################################################################################################################
+
 
 # API URL.
 BASE_URL = "https://testnet.bitmex.com/api/v1/"
 # BASE_URL = "https://www.bitmex.com/api/v1/" # Once you're ready, uncomment this.
 
 # The BitMEX API requires permanent API keys. Go to https://testnet.bitmex.com/app/apiKeys to fill these out.
-API_KEY = ""
-API_SECRET = ""
+API_KEY = "9cntlL3x6EJRLGW6uAgjKDeP"
+API_SECRET = "rB_Dxs9VfdiYqMMHtUeFS-v3tMcghs_GuULhInE-C5N2mK5z"
 
 
 ########################################################################################################################
@@ -32,8 +44,8 @@ ORDER_PAIRS = 6
 # ORDER_START_SIZE will be the number of contracts submitted on level 1
 # Number of contracts from level 1 to ORDER_PAIRS - 1 will follow the function
 # [ORDER_START_SIZE + ORDER_STEP_SIZE (Level -1)]
-ORDER_START_SIZE = 100
-ORDER_STEP_SIZE = 100
+ORDER_START_SIZE = 200
+ORDER_STEP_SIZE = 200
 
 # Distance between successive orders, as a percentage (example: 0.005 for 0.5%)
 INTERVAL = 0.005
@@ -65,8 +77,8 @@ RELIST_INTERVAL = 0.01
 # Position limits - set to True to activate. Values are in contracts.
 # If you exceed a position limit, the bot will log and stop quoting that side.
 CHECK_POSITION_LIMITS = False
-MIN_POSITION = -10000
-MAX_POSITION = 10000
+MIN_POSITION = -2000
+MAX_POSITION = 2000
 
 # If True, will only send orders that rest in the book (ExecInst: ParticipateDoNotInitiate).
 # Use to guarantee a maker rebate.
@@ -79,13 +91,13 @@ POST_ONLY = False
 ########################################################################################################################
 
 # If true, don't set up any orders, just say what we would do
-# DRY_RUN = True
+# DRY_RUN = False
 DRY_RUN = False
 
 # How often to re-check and replace orders.
 # Generally, it's safe to make this short because we're fetching from websockets. But if too many
 # order amend/replaces are done, you may hit a ratelimit. If so, email BitMEX if you feel you need a higher limit.
-LOOP_INTERVAL = 5
+LOOP_INTERVAL = 3
 
 # Wait times between orders / errors
 API_REST_INTERVAL = 1
