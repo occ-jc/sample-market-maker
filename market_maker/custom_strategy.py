@@ -52,27 +52,34 @@ class CustomOrderManager(OrderManager):
             if qty > 1:
                 print("p1")
 
+                ## We do sell when shorts get Liquidatet
                 if side == "Buy":    # is it a short liquidation?
                     print("p2")
                     if settings.sell_active:    # is the sell side activatet ?
                         print("p3")
-                        if settings.sell_threshold < price:                # is the price above the sell threshold ? 
-                            qty = int(round(qty/settings.factor_short))       # reduce by factor
-                            print("p4")
-                            if qty > 0:
-                                print("p5")
-                                sell_orders.append({'price': price, 'orderQty': qty, 'side': "Sell"})   # send the orders
+                        if not self.short_position_limit_exceeded(): #short positon limit not exceeded
+                            print("p3.1")
+                            if settings.sell_threshold < price:                # is the price above the sell threshold ? 
+                                qty = int(round(qty/settings.factor_short))       # reduce by factor
+                                print("p4")
+                                if qty > 0:
+                                    print("p5")
+                                    sell_orders.append({'price': price, 'orderQty': qty, 'side': "Sell"})   # send the orders
 
+                                
+                ## We do buy when longs get liquidatet
                 if side == "Sell":    # is it a long liquidation?
                     print("p2.2")
                     if settings.buy_active:    # is the buy side activatet ?
                         print("p3.3")
-                        if settings.buy_threshold > price:                # is the price below the buy threshold ?
-                            print("p4.4")
-                            qty = int(round(qty/settings.factor_long))       # reduce by factor
-                            if qty > 0:
-                                print("p5.5")
-                                buy_orders.append({'price': price, 'orderQty': qty, 'side': "Buy"})   # send the orders        except:
+                        if not self.long_position_limit_exceeded(): #long positon limit not exceeded
+                            print("p3.3.1")
+                            if settings.buy_threshold > price:                # is the price below the buy threshold ?
+                                print("p4.4")
+                                qty = int(round(qty/settings.factor_long))       # reduce by factor
+                                if qty > 0:
+                                    print("p5.5")
+                                    buy_orders.append({'price': price, 'orderQty': qty, 'side': "Buy"})   # send the orders
             
         except:
             pass
